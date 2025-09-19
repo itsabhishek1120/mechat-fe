@@ -11,7 +11,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   } else {
     console.log("Token Not Found");
-    router.navigate(['/auth/login']);
+    // router.navigate(['/auth/login']);
     // return false;
     return true;
   }
