@@ -1,1 +1,41 @@
-<p>chat-list works!</p>
+<div class="h-screen bg-gray-50 flex flex-col">
+  <!-- Header -->
+  <div class="px-5 py-4 bg-white shadow-md flex justify-between items-center">
+    <h1 class="text-xl font-bold">Chats</h1>
+    <button class="p-2 rounded-full hover:bg-gray-200 transition">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+  </div>
+
+  <!-- Chat List -->
+  <div class="flex-1 overflow-y-auto">
+    <div
+      *ngFor="let chat of chats"
+      class="flex items-center p-4 border-b hover:bg-gray-100 transition cursor-pointer"
+    >
+      <!-- Avatar -->
+      <img
+        [src]="chat.avatar"
+        alt="avatar"
+        class="w-12 h-12 rounded-full object-cover mr-4 shadow"
+      />
+
+      <!-- Chat Details -->
+      <div class="flex-1 min-w-0">
+        <div class="flex justify-between items-center">
+          <h2 class="font-semibold text-gray-800 truncate">{{ chat.name }}</h2>
+          <span class="text-xs text-gray-500">{{ chat.time }}</span>
+        </div>
+        <p class="text-sm text-gray-600 truncate">{{ chat.lastMessage }}</p>
+      </div>
+
+      <!-- Unread Badge -->
+      <div *ngIf="chat.unread > 0" class="ml-3">
+        <span
+          class="px-2 py-1 text-xs font-bold text-white bg-blue-500 rounded-full shadow"
+          >{{ chat.unread }}</span
+        >
+      </div>
+    </div>
+  </div>
+</div>

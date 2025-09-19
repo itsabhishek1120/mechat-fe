@@ -1,1 +1,78 @@
-<p>navbar works!</p>
+<nav
+  class="backdrop-blur-md bg-[#ECF0F3]/70 shadow-md fixed w-full z-50 border-b border-white/30"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <!-- Logo -->
+      <a routerLink="/" class="text-2xl font-extrabold text-[#3182CE] tracking-wide">
+        ❄ ChatApp
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-6">
+        <a
+          routerLink="/"
+          class="text-[#2D3748] hover:text-[#3182CE] font-medium transition"
+          >Home</a
+        >
+        <a
+          routerLink="/chats"
+          class="text-[#2D3748] hover:text-[#3182CE] font-medium transition"
+          >Chats</a
+        >
+        <a
+          routerLink="/profile"
+          class="text-[#2D3748] hover:text-[#3182CE] font-medium transition"
+          >Profile</a
+        >
+      </div>
+
+      <!-- Right Section (Icons / Avatar) -->
+      <div class="hidden md:flex items-center space-x-4">
+        <button
+          class="p-2 rounded-full bg-[#90CDF4]/50 hover:bg-[#90CDF4] text-[#2D3748] hover:text-white transition shadow"
+        >
+          <i class="fa-solid fa-bell"></i>
+        </button>
+        <button
+          class="p-2 rounded-full bg-[#CBD5E0]/50 hover:bg-[#3182CE] text-[#2D3748] hover:text-white transition shadow"
+        >
+          <i class="fa-solid fa-gear"></i>
+        </button>
+        <img
+          src="https://i.pravatar.cc/40"
+          alt="User Avatar"
+          class="w-10 h-10 rounded-full border-2 border-[#3182CE] shadow-md"
+        />
+      </div>
+
+      <!-- Mobile Hamburger -->
+      <div class="flex md:hidden items-center">
+        <button (click)="toggleMenu()" class="focus:outline-none">
+            <img
+            src="https://i.pravatar.cc/40"
+            alt="User Avatar"
+            class="w-8 h-8 rounded-full border-2 border-[#3182CE] shadow-md"
+            />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Dropdown -->
+  <div *ngIf="mobileMenuOpen" class="md:hidden bg-[#ECF0F3]/90 backdrop-blur-md shadow-lg">
+    <div class="px-4 pt-2 pb-3 space-y-2">
+      <a routerLink="/" class="block text-[#2D3748] hover:text-[#3182CE]">Home</a>
+      <a routerLink="/chats" class="block text-[#2D3748] hover:text-[#3182CE]">Chats</a>
+      <a routerLink="/profile" class="block text-[#2D3748] hover:text-[#3182CE]">Profile</a>
+    </div>
+    <div class="flex items-center px-4 py-3 border-t border-white/20">
+      <img
+        src="https://i.pravatar.cc/40"
+        alt="User Avatar"
+        class="w-9 h-9 rounded-full border border-[#3182CE] mr-3"
+      />
+      <span class="text-[#2D3748] font-medium">John Doe</span>
+    </div>
+  </div>
+</nav>
