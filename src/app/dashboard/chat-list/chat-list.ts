@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 interface Chat {
   id: number;
@@ -17,6 +18,9 @@ interface Chat {
   styleUrl: './chat-list.scss'
 })
 export class ChatList {
+
+  constructor(private router: Router){}
+
   chats: Chat[] = [
     {
       id: 1,
@@ -43,4 +47,11 @@ export class ChatList {
       unread: 5,
     },
   ];
+
+  openChat(chat: any){
+    console.log("Open the chat for: ", chat?.name);
+    this.router.navigate(['/chat', chat?.id],{
+      state : chat
+    });
+  }
 }

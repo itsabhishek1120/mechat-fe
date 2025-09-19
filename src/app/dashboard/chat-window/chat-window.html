@@ -1,1 +1,69 @@
-<p>chat-window works!</p>
+<div class="h-screen flex flex-col bg-[#ECF0F3]">
+  <!-- Header -->
+  <div
+    class="px-4 py-3 backdrop-blur-md bg-[#ECF0F3]/80 border-b border-white/30 shadow flex items-center justify-between"
+  >
+    <div class="flex items-center space-x-3">
+      <img
+        src="https://i.pravatar.cc/40?img=5"
+        alt="Avatar"
+        class="w-10 h-10 rounded-full border-2 border-[#3182CE] shadow"
+      />
+      <div>
+        <h2 class="font-semibold text-[#2D3748]">Alice Johnson</h2>
+        <p class="text-xs text-gray-500">online</p>
+      </div>
+    </div>
+    <div class="flex space-x-3 text-[#2D3748]">
+      <button class="p-2 rounded-full hover:bg-[#CBD5E0]/50">
+        <i class="fa-solid fa-phone"></i>
+      </button>
+      <button class="p-2 rounded-full hover:bg-[#CBD5E0]/50">
+        <i class="fa-solid fa-video"></i>
+      </button>
+      <button class="p-2 rounded-full hover:bg-[#CBD5E0]/50">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+    <div
+      *ngFor="let msg of messages"
+      [ngClass]="msg.sender === 'me' ? 'flex justify-end' : 'flex justify-start'"
+    >
+      <div
+        [ngClass]="
+          msg.sender === 'me'
+            ? 'bg-[#90CDF4] text-[#2D3748] rounded-l-2xl rounded-tr-2xl'
+            : 'bg-[#CBD5E0] text-[#2D3748] rounded-r-2xl rounded-tl-2xl'
+        "
+        class="max-w-xs px-4 py-2 shadow-md"
+      >
+        <p>{{ msg.text }}</p>
+        <span class="text-[10px] text-gray-600 block text-right mt-1">
+          {{ msg.time }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div
+    class="px-4 py-3 backdrop-blur-md bg-[#ECF0F3]/80 border-t border-white/30 flex items-center space-x-3"
+  >
+    <input
+      [(ngModel)]="newMessage"
+      type="text"
+      placeholder="Type a message..."
+      class="flex-1 px-4 py-2 rounded-full bg-white/70 border border-[#CBD5E0] text-[#2D3748] focus:outline-none focus:border-[#3182CE]"
+    />
+    <button
+      (click)="sendMessage()"
+      class="px-4 py-2 rounded-full bg-[#3182CE] text-white hover:bg-[#90CDF4] shadow transition"
+    >
+      <i class="fa-solid fa-paper-plane"></i>
+    </button>
+  </div>
+</div>

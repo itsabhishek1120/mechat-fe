@@ -12,6 +12,7 @@
     <div
       *ngFor="let chat of chats"
       class="flex items-center p-4 border-b hover:bg-gray-100 transition cursor-pointer"
+      (click)="openChat(chat)"
     >
       <!-- Avatar -->
       <img
