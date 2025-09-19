@@ -8,5 +8,5 @@ export const DASHBOARD_ROUTES: Routes = [
   { path: 'chats', component: ChatList, canActivate: [authGuard] },
   { path: 'chat/:id', component: ChatWindow, canActivate: [authGuard] }, // dynamic chat window
   { path: 'contacts', component: Contacts, canActivate: [authGuard] },
-  { path: '', redirectTo: 'chats', pathMatch: 'full', canActivate: [authGuard] } // default route
+  { path: '', redirectTo: 'chats', pathMatch: 'full' } // default route
 ];

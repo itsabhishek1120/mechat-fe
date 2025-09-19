@@ -13,7 +13,7 @@ import { RouterModule, Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -32,5 +32,6 @@ export class LoginComponent implements OnInit {
       return;
     }
     console.log('Login form submitted:', this.loginForm.value);
+    this.router.navigate(['/chat-list']);
   }
 }
