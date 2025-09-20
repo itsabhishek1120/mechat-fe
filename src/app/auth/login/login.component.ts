@@ -32,6 +32,6 @@ export class LoginComponent implements OnInit {
       return;
     }
     console.log('Login form submitted:', this.loginForm.value);
-    this.router.navigate(['/chat-list']);
+    this.router.navigate(['/chats']);
   }
 }
