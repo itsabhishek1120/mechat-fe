@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 interface Message {
   id: number;
@@ -11,7 +11,7 @@ interface Message {
 }
 @Component({
   selector: 'app-chat-window',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './chat-window.html',
   styleUrl: './chat-window.scss'
 })
