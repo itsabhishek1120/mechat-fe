@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Navbar } from "../../shared/navbar/navbar";
 
 interface Chat {
   id: number;
@@ -13,7 +14,7 @@ interface Chat {
 
 @Component({
   selector: 'app-chat-list',
-  imports: [CommonModule],
+  imports: [CommonModule, Navbar],
   templateUrl: './chat-list.html',
   styleUrl: './chat-list.scss'
 })

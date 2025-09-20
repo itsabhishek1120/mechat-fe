@@ -4,12 +4,12 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16 items-center">
       <!-- Logo -->
-      <a routerLink="/" class="text-2xl font-extrabold text-[#3182CE] tracking-wide">
-        ❄ ChatApp
+      <a class="text-2xl font-extrabold text-[#3182CE] tracking-wide">
+        ❄ MeChat
       </a>
 
       <!-- Desktop Menu -->
-      <div class="hidden md:flex items-center space-x-6">
+      <!-- <div class="hidden md:flex items-center space-x-6">
         <a
           routerLink="/"
           class="text-[#2D3748] hover:text-[#3182CE] font-medium transition"
@@ -25,19 +25,19 @@
           class="text-[#2D3748] hover:text-[#3182CE] font-medium transition"
           >Profile</a
         >
-      </div>
+      </div> -->
 
       <!-- Right Section (Icons / Avatar) -->
       <div class="hidden md:flex items-center space-x-4">
         <button
-          class="p-2 rounded-full bg-[#90CDF4]/50 hover:bg-[#90CDF4] text-[#2D3748] hover:text-white transition shadow"
+          class="p-2 rounded-full bg-[#90CDF4]/50 hover:bg-[#90CDF4] text-[#2D3748] hover:text-white transition shadow" title="Add Chat"
         >
-          <i class="fa-solid fa-bell"></i>
+          <i class="fa-solid fa-plus"></i>
         </button>
         <button
-          class="p-2 rounded-full bg-[#CBD5E0]/50 hover:bg-[#3182CE] text-[#2D3748] hover:text-white transition shadow"
+          class="p-2 rounded-full bg-[#CBD5E0]/50 hover:bg-[#3182CE] text-[#2D3748] hover:text-white transition shadow" title="LogOut"
         >
-          <i class="fa-solid fa-gear"></i>
+          <i class="fa-solid fa-right-from-bracket"></i>
         </button>
         <img
           src="https://i.pravatar.cc/40"
@@ -48,6 +48,11 @@
 
       <!-- Mobile Hamburger -->
       <div class="flex md:hidden items-center">
+        <button
+          class="p-2 mr-3 rounded-full bg-[#90CDF4]/50 hover:bg-[#90CDF4] text-[#2D3748] hover:text-white transition shadow" title="Add Chat"
+        >
+          <i class="fa-solid fa-plus mr-1"></i> <span class="text-[#3182CE] text-sm">Add</span>
+        </button>
         <button (click)="toggleMenu()" class="focus:outline-none">
             <img
             src="https://i.pravatar.cc/40"
@@ -60,19 +65,17 @@
   </div>
 
   <!-- Mobile Menu Dropdown -->
-  <div *ngIf="mobileMenuOpen" class="md:hidden bg-[#ECF0F3]/90 backdrop-blur-md shadow-lg">
-    <div class="px-4 pt-2 pb-3 space-y-2">
-      <a routerLink="/" class="block text-[#2D3748] hover:text-[#3182CE]">Home</a>
-      <a routerLink="/chats" class="block text-[#2D3748] hover:text-[#3182CE]">Chats</a>
-      <a routerLink="/profile" class="block text-[#2D3748] hover:text-[#3182CE]">Profile</a>
-    </div>
-    <div class="flex items-center px-4 py-3 border-t border-white/20">
-      <img
-        src="https://i.pravatar.cc/40"
-        alt="User Avatar"
-        class="w-9 h-9 rounded-full border border-[#3182CE] mr-3"
-      />
-      <span class="text-[#2D3748] font-medium">John Doe</span>
+  <div *ngIf="mobileMenuOpen" class="md:hidden absolute top-14 right-1 w-40 bg-[#ECF0F3]/90 backdrop-blur-md shadow-lg rounded-lg">
+    <div class="px-4 pt-2 pb-2 space-y-2 text-center">
+      <span class="text-[#2D3748] font-medium">LogOut</span>
+      <button
+        class="p-2 ml-3 rounded-full bg-[#CBD5E0]/50 hover:bg-[#3182CE] text-[#2D3748] hover:text-white transition shadow"
+        title="LogOut"
+         routerLink="/welcome"
+      >
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
     </div>
   </div>
+
 </nav>
