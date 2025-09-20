@@ -1,0 +1,47 @@
+<div class="relative h-screen flex flex-col items-center justify-center text-center overflow-hidden px-4">
+  <!-- Animated gradient background -->
+  <div class="absolute inset-0 bg-gradient-to-br from-[#ECF0F3] via-[#CBD5E0] to-[#90CDF4] animate-gradient"></div>
+
+  <!-- Snowflake effect -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="snowflake">❄️</div>
+    <div class="snowflake">❄️</div>
+    <div class="snowflake">❄️</div>
+    <div class="snowflake">❄️</div>
+    <div class="snowflake">❄️</div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10">
+    <!-- Icon -->
+    <div class="mb-8 sm:mb-10">
+      <div class="w-20 h-20 sm:w-28 sm:h-28 mx-auto rounded-full bg-[#3182CE] flex items-center justify-center shadow-lg">
+        <i class="fa-solid fa-comments text-white text-3xl sm:text-4xl"></i>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-2xl sm:text-3xl font-bold text-[#2D3748] mb-2 sm:mb-3">
+      Welcome to FrostChat ❄️
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="text-sm sm:text-base text-gray-700 max-w-xs sm:max-w-md mx-auto mb-6 sm:mb-8">
+      Connect, share, and chat with your friends in a beautifully simple way.
+    </p>
+
+    <!-- Button -->
+    <button
+      (click)="goToLogin()"
+      class="bg-[#3182CE] hover:bg-[#90CDF4] text-white px-6 py-2 sm:px-8 sm:py-3 rounded-full shadow-md transition transform hover:scale-105 text-sm sm:text-base"
+    >
+      Let’s Chat 💬
+    </button>
+
+    <!-- Signup link -->
+    <p class="mt-8 sm:mt-12 text-xs sm:text-sm text-gray-600">
+      New here?
+      <a (click)="goToRegister()" class="text-[#3182CE] hover:underline">Create an account</a>
+    </p>
+  </div>
+</div>

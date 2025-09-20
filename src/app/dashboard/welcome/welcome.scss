@@ -1,0 +1,31 @@
+/* Animated gradient background */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientBG 10s ease infinite;
+}
+
+/* Snowflake animation */
+.snowflake {
+  position: absolute;
+  top: -10px;
+  font-size: 1.5rem;
+  opacity: 0.8;
+  animation: fall linear infinite;
+}
+
+.snowflake:nth-child(1) { left: 20%; animation-duration: 8s; animation-delay: 0s; }
+.snowflake:nth-child(2) { left: 40%; animation-duration: 10s; animation-delay: 2s; }
+.snowflake:nth-child(3) { left: 60%; animation-duration: 12s; animation-delay: 4s; }
+.snowflake:nth-child(4) { left: 80%; animation-duration: 9s; animation-delay: 1s; }
+.snowflake:nth-child(5) { left: 50%; animation-duration: 11s; animation-delay: 3s; }
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(100vh) rotate(360deg); }
+}
