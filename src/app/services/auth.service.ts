@@ -17,15 +17,16 @@ export class AuthService {
   }
 
   /** Login */
-  login(email: string, token: string, expiresIn: number) {
+  login(username: string, token: string, expiresIn: number) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
 
     const user: User = {
       id: Date.now().toString(),
-      email,
+      username,
       token,
       tokenExpirationDate: expirationDate
     };
+    // console.log("user>>",user);
 
     // update BehaviorSubject
     this.currentUserSubject.next(user);
