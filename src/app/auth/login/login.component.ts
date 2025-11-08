@@ -22,7 +22,9 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private globalService: GlobalService,
     private alertService: AlertService,
-  ) {}
+  ) {
+    localStorage.removeItem('userData');
+  }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({

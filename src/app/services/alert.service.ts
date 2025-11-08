@@ -36,7 +36,7 @@ export class AlertService {
   warning(message: string, title: string = 'Warning') {
     Swal.fire({
       icon: 'warning',
-      title,
+      // title,
       text: message,
       showConfirmButton: false,
       timer: 2500,
@@ -48,7 +48,7 @@ export class AlertService {
   info(message: string, title: string = 'Info') {
     Swal.fire({
       icon: 'info',
-      title,
+      // title,
       text: message,
       showConfirmButton: false,
       timer: 2500,

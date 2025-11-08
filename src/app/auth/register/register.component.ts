@@ -22,7 +22,9 @@ export class RegisterComponent implements OnInit {
       private authService: AuthService,
       private globalService: GlobalService,
       private alertService: AlertService,
-    ) {}
+    ) {
+    localStorage.removeItem('userData');
+    }
 
   ngOnInit(): void {
     this.registerForm = this.fb.group(

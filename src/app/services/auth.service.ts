@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, timer, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
+import { AlertService } from "../services/alert.service";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AuthService {
 
   private tokenTimer?: Subscription;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private alertService: AlertService) {
     this.autoLogin();
   }
 
@@ -46,6 +47,7 @@ export class AuthService {
     if (this.tokenTimer) this.tokenTimer.unsubscribe();
 
     this.router.navigate(['/login']);
+    this.alertService.info("Logged out");
   }
 
   /** Auto-logout when token expires */
