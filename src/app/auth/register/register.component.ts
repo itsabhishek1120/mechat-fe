@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService } from "../../services/auth.service";
+import { GlobalService } from "../../services/global.service";
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-register',
@@ -13,12 +16,18 @@ import { RouterModule } from '@angular/router';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+      private fb: FormBuilder,
+      private router: Router,
+      private authService: AuthService,
+      private globalService: GlobalService,
+      private alertService: AlertService,
+    ) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group(
       {
-        name: ['', Validators.required],
+        username: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
@@ -42,11 +51,34 @@ export class RegisterComponent implements OnInit {
     return null;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
     }
     console.log('Register form submitted:', this.registerForm.value);
+    try {
+      const formData = this.registerForm.value;
+      if (!formData.username || !formData.email || !formData.password) {
+        throw new Error("Invalid Register request");
+      }
+      const apiBody = {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password
+      }
+      const registerDetail = await this.globalService.post("auth/register", apiBody);
+      console.log("apiCall::",registerDetail);
+      const username = registerDetail?.user?.username;
+      const token = registerDetail?.token;
+      if (!username || !token) {
+        throw new Error("Invalid Register response");
+      }
+      this.authService.login(username, token, 24 * 60 * 60);
+      this.router.navigate(['/chats']);
+      this.alertService.success(`Welcome to MeChat ${username}`);
+    } catch (error) {
+      console.error("Register failed:", error);
+    }
   }
 }

@@ -14,8 +14,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       let message = 'An unknown error occurred';
       console.log("Han bhai yhi hu...",error.error);
-      if(error.error.message) message = error.error.message;
-
+      
       if (error.status === 0) {
         message = 'Network error. Please check your connection.';
       } else if (error.status === 401) {
@@ -28,7 +27,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else if (error.status >= 500) {
         message = 'Server error. Please try again later.';
       }
-
+      
+      if(error.error.message) message = error.error.message;
       // snackBar.open(message, 'Close', {
       //   duration: 3000,          // auto close after 3s
       //   horizontalPosition: 'right',

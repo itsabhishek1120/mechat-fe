@@ -8,7 +8,7 @@ export class AlertService {
   success(message: string, title: string = 'Success') {
     Swal.fire({
       icon: 'success',
-      title,
+      // title,
       text: message,
       showConfirmButton: false,
       timer: 2000,

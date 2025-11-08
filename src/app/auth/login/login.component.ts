@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from "../../services/auth.service";
 import { GlobalService } from "../../services/global.service";
+import { AlertService } from "../../services/alert.service";
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,13 @@ import { GlobalService } from "../../services/global.service";
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService, private globalService: GlobalService) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService,
+    private globalService: GlobalService,
+    private alertService: AlertService,
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -45,8 +52,9 @@ export class LoginComponent implements OnInit {
       if (!username || !token) {
         throw new Error("Invalid login response");
       }
-      this.authService.login(loginDetail.user.username, loginDetail.token, 24 * 60 * 60);
+      this.authService.login(username, token, 24 * 60 * 60);
       this.router.navigate(['/chats']);
+      this.alertService.success(`Welcome back ${username}`);
     } catch (error: any) {
       console.error("Login failed:", error);
     }
