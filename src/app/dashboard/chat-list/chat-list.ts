@@ -78,7 +78,7 @@ export class ChatList {
   // ];
 
   openChat(chat: any){
-    console.log("Open the chat for: ", chat?.username);
+    console.log("Open the chat for: ", chat);
     this.router.navigate(['/chat', chat?.id],{
       state : chat
     });
