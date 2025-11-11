@@ -12,6 +12,8 @@ interface Message {
 }
 
 interface Chat {
+  userid: string,
+  chatid: string,
   name: string,
   status: string,
   profile: string
@@ -25,9 +27,11 @@ interface Chat {
 export class ChatWindow {
 
   chatDetail: Chat = {
+    userid: '',
+    chatid: '',
     name: '-',
     status: 'online',
-    profile: '-'
+    profile: '-',
   };
 
   messages: Message[] = [];
@@ -42,6 +46,8 @@ export class ChatWindow {
       this.chatDetail.name = chat?.username;
       this.chatDetail.status = 'online';
       this.chatDetail.profile = chat?.avatar;
+      this.chatDetail.userid = chat?.userid;
+      this.chatDetail.chatid = chat?.id;
 
       if (chat?.id) {        
         this.fetchChatMessages(chat.id);
@@ -55,7 +61,7 @@ export class ChatWindow {
   async fetchChatMessages(chatId: any){
     try {
       const mssgs = await this.globalService.get(`message/get-messages/${chatId}`);
-      console.log("mssgggggggggg::",mssgs);
+      console.log("mssgg::",mssgs);
       const currentUser = this.globalService.currentUser;
       for(const mssg of mssgs.data){
         this.messages.push({
@@ -80,14 +86,36 @@ export class ChatWindow {
 
     newMessage = '';
 
-    sendMessage() {
+    async sendMessage() {
       if (!this.newMessage.trim()) return;
-      this.messages.push({
+      console.log("this.chatDetail>>",this.chatDetail);
+      const messageText = this.newMessage;
+
+      const mssgTemp: Message = {
         id: Date.now(),
         sender: 'me',
         text: this.newMessage,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      });
+      };
+      this.messages.push(mssgTemp);
       this.newMessage = '';
+      
+      try {
+        const mssgBody = { 
+          reciever: this.chatDetail.userid,
+          chatId: this.chatDetail.chatid,
+          content: messageText
+        };
+        const sendMssg = await this.globalService.post('message/send', mssgBody);
+        console.log("sent mssg::",sendMssg);
+        
+      } catch (error) {
+        console.error('Message send failed:', error);
+        const index = this.messages.findIndex(m => m.id === mssgTemp.id);
+        if (index !== -1) {
+          this.messages.splice(index, 1);
+        }
+      }
+      
     }
 }

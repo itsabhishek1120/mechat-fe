@@ -7,6 +7,7 @@ import { GlobalService } from "../../services/global.service";
 interface Chat {
   id: number;
   username: string;
+  userid: string,
   avatar: string;
   lastMessage: string;
   time: string;
@@ -34,9 +35,12 @@ export class ChatList {
       let arr: any[] = [];
       for(const chat of chats){
         const ch = chat.users.filter((u: any) => u.username != currentUser.username );
+        console.log("chh:",ch);
+        
         arr.push({
           id: chat._id,
           username: ch[0].username,
+          userid: ch[0]._id,
           lastMessage: chat?.latestMessage?.content ? chat.latestMessage.content : ".",
           avatar: 'https://i.pravatar.cc/150?img=2',
           time: chat?.latestMessage?.createdAt ? this.globalService.formatRelativeTime(chat.latestMessage.createdAt) : "",
