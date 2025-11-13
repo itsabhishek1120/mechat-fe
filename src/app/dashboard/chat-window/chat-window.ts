@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -26,6 +26,20 @@ interface Chat {
   styleUrl: './chat-window.scss'
 })
 export class ChatWindow {
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.scrollContainer.nativeElement.scrollTop =
+        this.scrollContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   chatDetail: Chat = {
     userid: '',
@@ -61,7 +75,7 @@ export class ChatWindow {
           if (message.chat._id === this.chatDetail.chatid) {
             this.messages.push({
               id: message._id,
-              sender: message.sender._id === currentUser._id ? 'me' : 'other',
+              sender: message.sender._id === currentUser.id ? 'me' : 'other',
               text: message.content,
               time: this.globalService.formatRelativeTime(message.createdAt),
             });
@@ -124,7 +138,7 @@ export class ChatWindow {
         };
         const sendMssg = await this.globalService.post('message/send', mssgBody);
         console.log("sent mssg::",sendMssg);
-
+        this.scrollToBottom();
       } catch (error) {
         console.error('Message send failed:', error);
         const index = this.messages.findIndex(m => m.id === mssgTemp.id);
