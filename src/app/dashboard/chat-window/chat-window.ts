@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { GlobalService } from "../../services/global.service";
+import { SocketService } from "../../services/socket.service";
 
 interface Message {
   id: number;
@@ -36,13 +37,14 @@ export class ChatWindow {
 
   messages: Message[] = [];
 
-  constructor(private route: ActivatedRoute, private globalService: GlobalService) {}
+  constructor(private route: ActivatedRoute, private globalService: GlobalService, private socketService: SocketService) {}
 
   ngOnInit(): void {
     try {
       this.route.paramMap.subscribe(async params => {
       const chat = history?.state;
       console.log(">>>>",chat,":::",params);
+      const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
       this.chatDetail.name = chat?.username;
       this.chatDetail.status = 'online';
       this.chatDetail.profile = chat?.avatar;
@@ -51,6 +53,20 @@ export class ChatWindow {
 
       if (chat?.id) {        
         this.fetchChatMessages(chat.id);
+        this.socketService.joinChat(chat.id);
+
+        // Listen for new messages
+        this.socketService.onMessageReceived((message: any) => {
+          console.log("----------->>",message.content);
+          if (message.chat._id === this.chatDetail.chatid) {
+            this.messages.push({
+              id: message._id,
+              sender: message.sender._id === currentUser._id ? 'me' : 'other',
+              text: message.content,
+              time: this.globalService.formatRelativeTime(message.createdAt),
+            });
+          }
+        });
       }
     });
     } catch (error) {
@@ -62,7 +78,7 @@ export class ChatWindow {
     try {
       const mssgs = await this.globalService.get(`message/get-messages/${chatId}`);
       console.log("mssgg::",mssgs);
-      const currentUser = this.globalService.currentUser;
+      const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
       for(const mssg of mssgs.data){
         this.messages.push({
           id: mssg._id,
@@ -108,7 +124,7 @@ export class ChatWindow {
         };
         const sendMssg = await this.globalService.post('message/send', mssgBody);
         console.log("sent mssg::",sendMssg);
-        
+
       } catch (error) {
         console.error('Message send failed:', error);
         const index = this.messages.findIndex(m => m.id === mssgTemp.id);

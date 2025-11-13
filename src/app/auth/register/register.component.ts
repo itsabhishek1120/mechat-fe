@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
       if (!username || !token) {
         throw new Error("Invalid Register response");
       }
-      this.authService.login(username, token, 24 * 60 * 60);
+      this.authService.login(registerDetail?.user, token, 24 * 60 * 60);
       this.router.navigate(['/chats']);
       this.alertService.success(`Welcome to MeChat ${username}`);
     } catch (error) {

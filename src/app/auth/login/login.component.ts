@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
       if (!username || !token) {
         throw new Error("Invalid login response");
       }
-      this.authService.login(username, token, 24 * 60 * 60);
+      this.authService.login(loginDetail?.user, token, 24 * 60 * 60);
       this.router.navigate(['/chats']);
       this.alertService.success(`Welcome back ${username}`);
     } catch (error: any) {

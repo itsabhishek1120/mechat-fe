@@ -6,7 +6,7 @@ import { Observable, firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class GlobalService {
-  private baseUrl = "http://localhost:3000";
+  public baseUrl = "http://localhost:3000";
 
   constructor(private http: HttpClient){}
 

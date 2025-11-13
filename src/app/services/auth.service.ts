@@ -3,6 +3,7 @@ import { BehaviorSubject, timer, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
 import { AlertService } from "../services/alert.service";
+import { SocketService } from "../services/socket.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,29 +14,26 @@ export class AuthService {
 
   private tokenTimer?: Subscription;
 
-  constructor(private router: Router, private alertService: AlertService) {
+  constructor(private router: Router, private alertService: AlertService, private socketService: SocketService) {
     this.autoLogin();
   }
 
   /** Login */
-  login(username: string, token: string, expiresIn: number) {
+  login(userDetail: any, token: string, expiresIn: number) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
 
     const user: User = {
-      id: Date.now().toString(),
-      username,
-      token,
+      id: userDetail.id,
+      username: userDetail.username,
+      token: token,
       tokenExpirationDate: expirationDate
     };
-    // console.log("user>>",user);
-
-    // update BehaviorSubject
     this.currentUserSubject.next(user);
-
-    // persist in localStorage
     localStorage.setItem('userData', JSON.stringify(user));
 
-    // start auto-logout timer
+    //Connect to socket for the user
+    this.socketService.connect(user);
+
     this.autoLogout(expiresIn * 1000);
   }
 
@@ -45,7 +43,7 @@ export class AuthService {
     localStorage.removeItem('userData');
 
     if (this.tokenTimer) this.tokenTimer.unsubscribe();
-
+    this.socketService.disconnect();
     this.router.navigate(['/login']);
     this.alertService.info("Logged out");
   }
