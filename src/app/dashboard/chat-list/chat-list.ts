@@ -31,7 +31,7 @@ export class ChatList {
       const chatDetails = await this.globalService.get("chat/fetch-all-chats");
       console.log("chatDetails::", chatDetails);
       const chats = chatDetails.data;
-      const currentUser = this.globalService.currentUser;
+      const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
       let arr: any[] = [];
       for(const chat of chats){
         const ch = chat.users.filter((u: any) => u.username != currentUser.username );
