@@ -6,7 +6,8 @@ import { Observable, firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class GlobalService {
-  public baseUrl = "https://mechat-be.vercel.app";
+  // public baseUrl = "https://mechat-be.vercel.app";
+  public baseUrl = "https://mechat-be.onrender.com";
 
   constructor(private http: HttpClient){}
 
