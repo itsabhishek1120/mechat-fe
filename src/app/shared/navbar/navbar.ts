@@ -15,6 +15,8 @@ export class Navbar {
   constructor(private authService: AuthService, private router: Router){}
 
   toggleMenu() {
+    console.log("......");
+    
     this.mobileMenuOpen = !this.mobileMenuOpen;
   }
 

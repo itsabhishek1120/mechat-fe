@@ -1,1 +1,48 @@
-<p>contacts works!</p>
+<div class="h-screen flex flex-col bg-white">
+
+  <!-- Header -->
+  <div class="p-4 bg-[#ECF0F3]/70 text-white flex items-center gap-3 shadow">
+    <button class="px-2 rounded-full bg-transparent cursor-pointer hover:bg-gray-200/20 transition text-gray-800" routerLink="/chats">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+    <span class="text-xl font-extrabold text-[#3182CE] tracking-wide mr-1">Contacts</span>
+
+    <div class="flex-1">
+        <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Search contacts"
+        class="w-full px-4 py-2 rounded-2xl border border-blue-400 text-sm text-gray-700 focus:outline-none placeholder-gray-400"
+        />
+    </div>
+  </div>
+
+  <!-- Contact List -->
+  <div class="flex-1 overflow-y-auto">
+
+    <div
+    *ngFor="let c of filteredContacts"
+    class="px-4 py-3 flex items-center gap-4 border-b"
+    >
+        <!-- DP -->
+        <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-lg font-semibold text-gray-700">
+            {{ c.name[0].charAt(0).toUpperCase() }}
+        </div>
+
+        <!-- Info -->
+        <div class="flex-1 flex flex-col">
+            <span class="font-medium text-gray-900 text-base">{{ c.name.charAt(0).toUpperCase() + c.name.slice(1) }}</span>
+            <!-- <span class="text-sm text-gray-500">{{ c.status }}</span> -->
+        </div>
+
+        <!-- Add Icon -->
+        <button
+            class="w-8 h-8 flex items-center justify-center cursor-pointer bg-[#3182CE]/80 text-white rounded-full hover:bg-[#90CDF4]"
+            (click)="addContact(c)"
+        >
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+  </div>
+</div>
