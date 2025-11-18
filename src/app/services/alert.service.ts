@@ -56,4 +56,16 @@ export class AlertService {
       position: 'top-end'
     });
   }
+
+  confirm(message: string, confirmText: string = 'Yes', cancelText: string = 'No') {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: message,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: confirmText,
+      cancelButtonText: cancelText,
+      reverseButtons: true
+    });
+  }
 }

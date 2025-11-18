@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { GlobalService } from "../../services/global.service";
+import { AlertService } from "../../services/alert.service";
 
 interface Contact {
   id: number,
@@ -17,21 +18,31 @@ interface Contact {
 export class Contacts {
   searchText = "";
   contacts: Contact[] = [];
+  contactArr: any[] = [];
+  currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
 
 
-  constructor(private globalService: GlobalService){}
+  constructor(private globalService: GlobalService, private alertService: AlertService){}
 
   async ngOnInit(){
     try {
       const allUsers = await this.globalService.get('user/get-users');
-      console.log(">>>>>",allUsers);
+      const currUserDetails = await this.globalService.get('user/current-user');
+      this.contactArr = currUserDetails.data.contacts.map((c: { contactId: any; }) => c.contactId);
       for(const user of allUsers.data){
-        this.contacts.push({
-          id: user._id,
-          name: user.username
-        });
+        if(this.currentUser.id != user._id && !this.contactArr.some(item => item._id === user._id)){
+          this.contacts.push({
+            id: user._id,
+            name: user.username
+          });
+        }
       }
-      console.log("Contacts::",this.contacts);
+      console.log("this.contacts::",this.contacts);
+      this.contactArr = this.contactArr.map(item => ({
+        id: item._id,
+        name: item.username
+      }));
+      console.log("this.contactArr::",this.contactArr);
       
     } catch (error) {
       console.error("Error loading contacts:", error);
@@ -58,9 +69,43 @@ export class Contacts {
     );
   }
 
+  get filteredAddedContacts() {
+    if (!this.searchText.trim()) {
+      return this.contactArr; // show all
+    }
+
+    const s = this.searchText.toLowerCase();
+    console.log("this.contactArr>>",this.contactArr);
+    
+
+    return this.contactArr.filter(c =>
+      c.name.toLowerCase().includes(s)
+    );
+  }
+
   addContact(contact: any) {
-    console.log('Add contact:', contact);
-    // You can call your API or update local array here
+    try {
+      console.log('Add contact:', contact);
+      this.alertService.confirm(`Adding ${contact.name} to contacts`).then(async res => {
+        if (res.isConfirmed) {
+          console.log("Yesssssssssss");
+          const addContact = await this.globalService.post('user/add-contact',{
+            userId: this.currentUser.id,
+            contactId : contact.id
+          })
+          console.log("Added contact:",addContact);
+          this.contacts = this.contacts.filter(c => c.id !== contact.id);
+          this.contactArr = [...this.contactArr, contact];
+
+          this.alertService.success("Contact added");
+        } else {
+          console.log("No!!!!");
+        }
+      })
+    } catch (error) {
+      console.error("Error adding contact:", error);
+    }
+    
   }
 
 }

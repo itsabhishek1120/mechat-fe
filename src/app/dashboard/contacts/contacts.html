@@ -44,5 +44,24 @@
         </button>
     </div>
 
+    <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-100">
+      Added Contacts
+    </div>
+
+    <div
+    *ngFor="let c of filteredAddedContacts"
+    class="px-4 py-3 flex items-center gap-4 border-b"
+    >
+        <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-lg font-semibold text-gray-700">
+            {{ c.name[0].charAt(0).toUpperCase() }}
+        </div>
+
+        <div class="flex-1 flex flex-col">
+            <span class="font-medium text-gray-900 text-base">{{ c.name.charAt(0).toUpperCase() + c.name.slice(1) }}</span>
+            <!-- <span class="text-sm text-gray-500">{{ c.status }}</span> -->
+        </div>
+      
+    </div>
+
   </div>
 </div>
