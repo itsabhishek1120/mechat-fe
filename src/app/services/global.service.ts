@@ -1,6 +1,7 @@
 import { Injectable, importProvidersFrom  } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, firstValueFrom } from 'rxjs';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class GlobalService {
   public baseUrl = "https://mechat-be.onrender.com";
   // public baseUrl = "http://localhost:3000";
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient, private alertService: AlertService){}
 
   public currentUser = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')!) : {};
 
@@ -64,6 +65,21 @@ export class GlobalService {
         year: '2-digit',
         timeZone: 'Asia/Kolkata'
       });
+    }
+  }
+
+  async getContacts(){
+    try {
+      const currUserDetails = await this.get('user/current-user');
+      let contactArr = currUserDetails.data.contacts.map((c: { contactId: any; }) => c.contactId);
+      contactArr = contactArr.map((item: { _id: any; username: any; }) => ({
+        id: item._id,
+        name: item.username
+      }));
+      console.log("getContacts>>>>",contactArr);
+      return contactArr;
+    } catch (error) {
+      console.error("Error getting contacts:", error);
     }
   }
 }

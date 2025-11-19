@@ -27,23 +27,16 @@ export class Contacts {
   async ngOnInit(){
     try {
       const allUsers = await this.globalService.get('user/get-users');
-      const currUserDetails = await this.globalService.get('user/current-user');
-      this.contactArr = currUserDetails.data.contacts.map((c: { contactId: any; }) => c.contactId);
+      this.contactArr = await this.globalService.getContacts();
       for(const user of allUsers.data){
-        if(this.currentUser.id != user._id && !this.contactArr.some(item => item._id === user._id)){
+        if(this.currentUser.id != user._id && !this.contactArr.some(item => item.id === user._id)){
           this.contacts.push({
             id: user._id,
             name: user.username
           });
         }
       }
-      console.log("this.contacts::",this.contacts);
-      this.contactArr = this.contactArr.map(item => ({
-        id: item._id,
-        name: item.username
-      }));
       console.log("this.contactArr::",this.contactArr);
-      
     } catch (error) {
       console.error("Error loading contacts:", error);
     }
@@ -106,6 +99,10 @@ export class Contacts {
       console.error("Error adding contact:", error);
     }
     
+  }
+
+  openChat(contact: any){
+    console.log("Open contact for :",contact);
   }
 
 }

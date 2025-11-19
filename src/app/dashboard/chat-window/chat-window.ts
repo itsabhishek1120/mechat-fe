@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { GlobalService } from "../../services/global.service";
 import { SocketService } from "../../services/socket.service";
+import { AlertService } from "../../services/alert.service";
 
 interface Message {
   id: number;
@@ -27,6 +28,7 @@ interface Chat {
 })
 export class ChatWindow {
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  isContactAdded: boolean = true;
 
   ngAfterViewChecked() {
     this.scrollToBottom();
@@ -50,21 +52,29 @@ export class ChatWindow {
   };
 
   messages: Message[] = [];
+  contacts: any[] = [];
+  currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
 
-  constructor(private route: ActivatedRoute, private globalService: GlobalService, private socketService: SocketService) {}
+  constructor(
+    private route: ActivatedRoute, 
+    private globalService: GlobalService, 
+    private socketService: SocketService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit(): void {
     try {
       this.route.paramMap.subscribe(async params => {
       const chat = history?.state;
       console.log(">>>>",chat,":::",params);
-      const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
       this.chatDetail.name = chat?.username;
       this.chatDetail.status = 'online';
       this.chatDetail.profile = chat?.avatar;
       this.chatDetail.userid = chat?.userid;
       this.chatDetail.chatid = chat?.id;
-
+      this.contacts = await this.globalService.getContacts();
+      if(!this.contacts.some(item => item.id === chat?.userid)) this.isContactAdded = false;
+      
       if (chat?.id) {        
         this.fetchChatMessages(chat.id);
         this.socketService.joinChat(chat.id);
@@ -75,7 +85,7 @@ export class ChatWindow {
           if (message.chat._id === this.chatDetail.chatid) {
             this.messages.push({
               id: message._id,
-              sender: message.sender._id === currentUser.id ? 'me' : 'other',
+              sender: message.sender._id === this.currentUser.id ? 'me' : 'other',
               text: message.content,
               time: this.globalService.formatRelativeTime(message.createdAt),
             });
@@ -92,11 +102,10 @@ export class ChatWindow {
     try {
       const mssgs = await this.globalService.get(`message/get-messages/${chatId}`);
       console.log("mssgg::",mssgs);
-      const currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
       for(const mssg of mssgs.data){
         this.messages.push({
           id: mssg._id,
-          sender: mssg.sender.username == currentUser.username ? "me" : "other",
+          sender: mssg.sender.username == this.currentUser.username ? "me" : "other",
           text: mssg.content,
           time: this.globalService.formatRelativeTime(mssg.createdAt)
         });
@@ -145,6 +154,31 @@ export class ChatWindow {
         if (index !== -1) {
           this.messages.splice(index, 1);
         }
+      }
+      
+    }
+
+    async addContact(){
+      const contact = {id: this.chatDetail.userid, name: this.chatDetail.name};
+      try {
+        console.log('Add contact:', contact);
+        this.alertService.confirm(`Adding ${contact.name} to contacts`).then(async res => {
+          if (res.isConfirmed) {
+            console.log("Yesssssssssss");
+            const addContact = await this.globalService.post('user/add-contact',{
+              userId: this.currentUser.id,
+              contactId : contact.id
+            })
+            console.log("Added contact:",addContact);
+            this.isContactAdded = true;
+
+            this.alertService.success("Contact added");
+          } else {
+            console.log("No!!!!");
+          }
+        })
+      } catch (error) {
+        console.error("Error adding contact:", error);
       }
       
     }
