@@ -22,7 +22,7 @@ export class Contacts {
   currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
 
 
-  constructor(private globalService: GlobalService, private alertService: AlertService){}
+  constructor(private globalService: GlobalService, private router: Router, private alertService: AlertService){}
 
   async ngOnInit(){
     try {
@@ -101,8 +101,27 @@ export class Contacts {
     
   }
 
-  openChat(contact: any){
-    console.log("Open contact for :",contact);
+  async openChat(contact: any){
+    try {
+      console.log("Open contact for :",contact);
+      const openChat = await this.globalService.post('chat/access-chat',{ userId: contact.id });
+      console.log("openChat>>",openChat);
+      const chatId = openChat.data._id;
+      const chat = {
+        id: chatId,
+        username: contact.name,
+        userid: contact.id,
+        lastMessage: openChat.data?.latestMessage?.content ? openChat.data?.latestMessage?.content : ".",
+        avatar: "https://i.pravatar.cc/150?img=3",
+        time: openChat.data?.latestMessage?.createdAt ? this.globalService.formatRelativeTime(openChat.data.latestMessage.createdAt) : "",
+        unread: 1
+      }
+      this.router.navigate(['/chat', chat?.id],{
+        state : chat
+      });
+    } catch (error) {
+      console.error("Error opening chat:", error);
+    }
   }
 
 }

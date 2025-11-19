@@ -23,6 +23,7 @@ interface Chat {
 export class ChatList {
 
   chats: Chat[] = [];
+  contactArr: any[] = [];
 
   constructor(private router: Router, private globalService: GlobalService){}
 
@@ -49,6 +50,17 @@ export class ChatList {
       }
       this.chats = [...arr];
       console.log("this.chats:::",this.chats);
+      const chatIds = this.chats.map(b => b.userid);
+      this.contactArr = await this.globalService.getContacts();
+      this.contactArr = this.contactArr.filter(c => !chatIds.includes(c.id)).map(c => ({
+        id: '',
+        username: c.name,
+        userid: c.id,
+        lastMessage: ".",
+        avatar: 'https://i.pravatar.cc/150?img=1',
+        time: "",
+        unread: 0
+      }));
     } catch (error) {
       console.error("Unable to fetch chats:", error);
     }
@@ -86,5 +98,28 @@ export class ChatList {
     this.router.navigate(['/chat', chat?.id],{
       state : chat
     });
+  }
+
+  async openContact(chat: any){
+    try {
+      console.log("Open contact for :", chat);
+      const openChat = await this.globalService.post('chat/access-chat',{ userId: chat.userid });
+      console.log("openChat>>",openChat);
+      const chatId = openChat.data._id;
+      const chatObj = {
+        id: chatId,
+        username: chat.username,
+        userid: chat.userid,
+        lastMessage: openChat.data?.latestMessage?.content ? openChat.data?.latestMessage?.content : ".",
+        avatar: "https://i.pravatar.cc/150?img=3",
+        time: openChat.data?.latestMessage?.createdAt ? this.globalService.formatRelativeTime(openChat.data.latestMessage.createdAt) : "",
+        unread: 0
+      }
+      this.router.navigate(['/chat', chat?.id],{
+        state : chatObj
+      });
+    } catch (error) {
+      console.error("Error opening chat:", error);
+    }
   }
 }

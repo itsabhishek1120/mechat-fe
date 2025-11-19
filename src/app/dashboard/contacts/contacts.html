@@ -22,7 +22,7 @@
 
     <div
     *ngFor="let c of filteredContacts"
-    class="px-4 py-3 flex items-center gap-4 border-b"
+    class="px-4 py-3 flex items-center gap-4 border-b" (click)="openChat(c)"
     >
         <!-- DP -->
         <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-lg font-semibold text-gray-700">
@@ -38,7 +38,7 @@
         <!-- Add Icon -->
         <button
             class="w-8 h-8 flex items-center justify-center cursor-pointer bg-[#3182CE]/80 text-white rounded-full hover:bg-[#90CDF4]"
-            (click)="addContact(c)"
+            (click)="addContact(c); $event.stopPropagation()"
         >
             <i class="fa-solid fa-plus"></i>
         </button>
